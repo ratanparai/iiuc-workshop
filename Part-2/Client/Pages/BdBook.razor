@@ -6,7 +6,28 @@
 {
     @foreach (var statusMessage in _statusMessages)
     {
-        <div>@statusMessage.Name</div>
+        <div>
+            <h2>@statusMessage.Status</h2>
+            <p>@statusMessage.Name</p>
+            <p>Like: @statusMessage.LikeCount Comments: @statusMessage.CommentCount</p>
+
+            <h4>Comments</h4>
+            <div>
+                <textarea @bind="_comment" ></textarea>
+            </div>
+            <div>
+                <input type="text" placeholder="Name" @bind-value="_name" />
+            </div>
+            <div>
+                <button @onclick="@(e => AddCommentAsync(statusMessage.Id))">Comment</button>
+            </div>
+            @foreach (var comments in statusMessage.Comments)
+            {
+                <p>@comments.CommentText</p>
+                <p>- @comments.Name</p>
+                <hr>
+            }
+        </div>
     }
 }
 
@@ -14,9 +35,22 @@
 @code {
 
     private IReadOnlyList<StatusMessage> _statusMessages;
+
+    string _comment;
+    string _name;
     
     protected override async Task OnInitializedAsync()
     {
         _statusMessages = await BackendClient.GetAllAsync();
+    }
+
+    private async Task AddCommentAsync(Guid id)
+    {
+        Console.WriteLine(_comment);
+
+        _statusMessages = await BackendClient.PostComment(id, _name, _comment);
+
+        _comment = string.Empty;
+        _name = string.Empty;
     }
 }
