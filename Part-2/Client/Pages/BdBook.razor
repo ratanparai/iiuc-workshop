@@ -8,7 +8,8 @@
     {
         <div>
             <h2>@statusMessage.Status</h2>
-            <p>@statusMessage.Name</p>
+            <p>- @statusMessage.Name</p>
+            <button @onclick="@(e => AddLikeAsync(statusMessage.Id))">Like</button>
             <p>Like: @statusMessage.LikeCount Comments: @statusMessage.CommentCount</p>
 
             <h4>Comments</h4>
@@ -52,5 +53,10 @@
 
         _comment = string.Empty;
         _name = string.Empty;
+    }
+
+    private async Task AddLikeAsync(Guid id)
+    {
+        _statusMessages = await BackendClient.LikeAsync(id, _name);
     }
 }

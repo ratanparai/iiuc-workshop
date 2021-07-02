@@ -33,5 +33,15 @@ namespace Client
             await client.PostAsJsonAsync<Comment>("/Status/Comment/" + statusId, postComment);
             return await GetAllAsync();
         }
+
+        public async Task<List<StatusMessage>> LikeAsync(Guid statusId, string name)
+        {
+            var likeStatus = new Like
+            {
+                Name = name,
+            };
+            await client.PostAsJsonAsync<Like>("/Status/Like/" + statusId, likeStatus);
+            return await GetAllAsync();
+        }
     }
 }
