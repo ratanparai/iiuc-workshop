@@ -42,5 +42,15 @@ namespace Server.Controllers
             statusMessage.Comment(comment);
             return Ok(statusMessage);
         }
+        
+        [HttpPost("status")]
+        public ActionResult<StatusMessage> PostStatus([FromBody]CommentRequest commentRequest)
+        {
+            var status = new StatusMessage(Guid.NewGuid(), commentRequest.Name, commentRequest.StatusMessage);
+
+            _inMemoryDatabase.StatusMessages.Add(status);
+
+            return status;
+        }
     }
 }
