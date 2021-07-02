@@ -1,0 +1,22 @@
+@page "/bdbook"
+
+@inject BackendClient BackendClient
+
+@if (_statusMessages is not null)
+{
+    @foreach (var statusMessage in _statusMessages)
+    {
+        <div>@statusMessage.Name</div>
+    }
+}
+
+
+@code {
+
+    private IReadOnlyList<StatusMessage> _statusMessages;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _statusMessages = await BackendClient.GetAllAsync();
+    }
+}
